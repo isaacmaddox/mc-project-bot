@@ -7,7 +7,6 @@ import (
 	"os/signal"
 
 	"github.com/bwmarrin/discordgo"
-	"github.com/isaacmaddox/mc-project-bot/cmd"
 	"github.com/isaacmaddox/mc-project-bot/cmd/project"
 	"github.com/isaacmaddox/mc-project-bot/db"
 	"github.com/isaacmaddox/mc-project-bot/util"
@@ -19,7 +18,7 @@ import (
 var discord *discordgo.Session
 
 var (
-	TOKEN string
+	TOKEN          string
 	GUILD_ID       = *flag.String("guildId", "1367938202349863023", "the unique id for the server the bot runs in")
 	RemoveCommands = flag.Bool("remove", false, "unregisters all commands when the program is stopped")
 )
@@ -32,15 +31,15 @@ func init() {
 var commands = []*discordgo.ApplicationCommand{
 	// cmd.HiCommand,
 	project.ProjectCommand,
-	cmd.TestCommand,
-	cmd.ClearCommand,
+	// cmd.TestCommand,
+	// cmd.ClearCommand,
 }
 
 var commandHandlers = map[string]func(discord *discordgo.Session, i *discordgo.InteractionCreate){
-	// "hi": cmd.HiHandler,
+	// "hi":      cmd.HiHandler,
 	"project": project.ProjectHandler,
-	"test": cmd.TestHandler,
-	"clear": cmd.ClearHandler,
+	// "test":    cmd.TestHandler,
+	// "clear":   cmd.ClearHandler,
 }
 
 func init() {
@@ -57,7 +56,7 @@ func init() {
 
 func main() {
 	db.Init_database()
-	
+
 	discord.AddHandler(func(discord *discordgo.Session, r *discordgo.Ready) {
 		log.Printf("Logged in as %v#%v", discord.State.User.Username, discord.State.User.ID)
 	})

@@ -7,21 +7,21 @@ import (
 )
 
 var NewProjectCommand = &discordgo.ApplicationCommandOption{
-	Name: "new",
+	Name:        "new",
 	Description: "Create a new project",
-	Type: discordgo.ApplicationCommandOptionSubCommand,
+	Type:        discordgo.ApplicationCommandOptionSubCommand,
 	Options: []*discordgo.ApplicationCommandOption{
 		{
-			Name: "name",
-			Description: "Aaaaa",
-			Type: discordgo.ApplicationCommandOptionString,
-			Required: true,
+			Name:        "name",
+			Description: "Name",
+			Type:        discordgo.ApplicationCommandOptionString,
+			Required:    true,
 		},
 		{
-			Name: "description",
-			Description: "aaa",
-			Type: discordgo.ApplicationCommandOptionString,
-			Required: true,
+			Name:        "description",
+			Description: "Description",
+			Type:        discordgo.ApplicationCommandOptionString,
+			Required:    true,
 		},
 	},
 }
@@ -41,7 +41,7 @@ var NewProjectHandler = func(discord *discordgo.Session, i *discordgo.Interactio
 			Content: "New project created:",
 			Embeds: []*discordgo.MessageEmbed{
 				{
-					Title: project.Name,
+					Title:       project.Name,
 					Description: project.Description,
 				},
 			},

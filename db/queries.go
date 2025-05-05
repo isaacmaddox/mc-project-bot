@@ -10,7 +10,7 @@ var db *sql.DB
 
 func Init_database() {
 	db = util.Extract(sql.Open("sqlite3", "file:projects.db"))
-	
+
 	create_project_table := `
 		DROP TABLE IF EXISTS example;
 		CREATE TABLE IF NOT EXISTS project (
@@ -44,7 +44,7 @@ func (p *Project) Create(name, description string) {
 	`))
 
 	defer stmt.Close()
-	
+
 	util.ErrorCheck(
 		stmt.QueryRow(name, description).Scan(&p.ID, &p.Name, &p.Description), "Error inserting project: %v",
 	)
@@ -59,7 +59,7 @@ func (p *Project) Get(name string) bool {
 	defer get_project.Close()
 
 	err := get_project.QueryRow(name).Scan(&p.ID, &p.Name, &p.Description)
-	
+
 	if err != nil {
 		return false
 	}

@@ -10,34 +10,34 @@ import (
 )
 
 var NewResourceCommand = &discordgo.ApplicationCommandOption{
-	Name: "new",
+	Name:        "new",
 	Description: "Add new resource requirement",
-	Type: discordgo.ApplicationCommandOptionSubCommand,
+	Type:        discordgo.ApplicationCommandOptionSubCommand,
 	Options: []*discordgo.ApplicationCommandOption{
 		{
-			Name: "project",
-			Description: "Which project to add resource to",
-			Type: discordgo.ApplicationCommandOptionString,
-			Required: true,
+			Name:         "project",
+			Description:  "Which project to add resource to",
+			Type:         discordgo.ApplicationCommandOptionString,
+			Required:     true,
 			Autocomplete: true,
 		},
 		{
-			Name: "resource",
+			Name:        "resource",
 			Description: "Whatchu want fool",
-			Type: discordgo.ApplicationCommandOptionString,
-			Required: true,
+			Type:        discordgo.ApplicationCommandOptionString,
+			Required:    true,
 		},
 		{
-			Name: "goal",
+			Name:        "goal",
 			Description: "How much do ye need?",
-			Type: discordgo.ApplicationCommandOptionString,
-			Required: true,
+			Type:        discordgo.ApplicationCommandOptionString,
+			Required:    true,
 		},
 		{
-			Name: "amount",
+			Name:        "amount",
 			Description: "How much do ye have?",
-			Type: discordgo.ApplicationCommandOptionString,
-			Required: false,
+			Type:        discordgo.ApplicationCommandOptionString,
+			Required:    false,
 		},
 	},
 }
@@ -50,7 +50,7 @@ var NewResourceHandler = func(discord *discordgo.Session, i *discordgo.Interacti
 
 		for _, name := range db.GetProjectNames() {
 			options = append(options, &discordgo.ApplicationCommandOptionChoice{
-				Name: name,
+				Name:  name,
 				Value: name,
 			})
 		}
@@ -78,7 +78,7 @@ func NewResource(discord *discordgo.Session, i *discordgo.InteractionCreate) {
 
 	var project db.Project
 	found := project.Get(projectName)
-	
+
 	if !found {
 		discord.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 			Type: discordgo.InteractionResponseChannelMessageWithSource,
@@ -100,11 +100,11 @@ func NewResource(discord *discordgo.Session, i *discordgo.InteractionCreate) {
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
 			Content: fmt.Sprintf(
-				"# %s\n\n*Added resource*: **%s**\n-# [%s] (%s of %s)", 
-				project.Name, 
-				resource.Name, 
-				util.Make_progress(resource.Amount, resource.Goal), 
-				returnAmount, 
+				"# %s\n\n*Added resource*: **%s**\n-# [%s] (%s of %s)",
+				project.Name,
+				resource.Name,
+				util.Make_progress(resource.Amount, resource.Goal, 10),
+				returnAmount,
 				util.To_unit(resource.Goal),
 			),
 		},

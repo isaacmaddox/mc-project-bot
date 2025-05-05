@@ -5,21 +5,24 @@ import (
 )
 
 var ProjectCommand = &discordgo.ApplicationCommand{
-	Name: "project",
+	Name:        "project",
 	Description: "Interact with projects",
 	Options: []*discordgo.ApplicationCommandOption{
-		NewProjectCommand,
-		ResourceCommand,
+		// NewProjectCommand,
+		OverviewCommand,
+		// ResourceCommand,
 	},
 }
 
 var ProjectHandler = func(discord *discordgo.Session, i *discordgo.InteractionCreate) {
 	options := i.ApplicationCommandData().Options
 
-		switch options[0].Name {
-		case "new":
-			NewProjectHandler(discord, i)
-		case "resource":
-			ResourceHandler(discord, i)
-		}
+	switch options[0].Name {
+	// case "new":
+	// 	NewProjectHandler(discord, i)
+	case "overview":
+		OverviewHandler(discord, i)
+		// case "resource":
+		// 	ResourceHandler(discord, i)
+	}
 }
