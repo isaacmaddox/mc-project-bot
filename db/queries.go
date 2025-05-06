@@ -2,6 +2,7 @@ package db
 
 import (
 	"database/sql"
+	"errors"
 
 	"github.com/isaacmaddox/mc-project-bot/util"
 )
@@ -98,7 +99,6 @@ func (p *Project) AddResource(name string, amount, goal int) *Resource {
 	defer stmt.Close()
 
 	var resource Resource
-
 	var throwaway int
 
 	util.ErrorCheck(stmt.QueryRow(name, amount, goal, p.ID).Scan(&resource.ID, &resource.Name, &resource.Amount, &resource.Goal, &throwaway), "Error inserting resource: %v")
@@ -106,6 +106,34 @@ func (p *Project) AddResource(name string, amount, goal int) *Resource {
 	p.Resources = append(p.Resources, &resource)
 
 	return &resource
+}
+
+func (p *Project) ContributeResource(resourceName string, amount int) (*Resource, error) {
+	stmt := util.Extract(db.Prepare(`
+		UPDATE resource
+		SET amount = amount + ?
+		WHERE name = ? AND project_id = ?
+		RETURNING *
+	`))
+
+	defer stmt.Close()
+
+	var resource *Resource = nil
+	var throwaway int
+
+	for _, projectResource := range p.Resources {
+		if projectResource.Name == resourceName {
+			resource = projectResource
+			break
+		}
+	}
+	if resource == nil {
+		return nil, errors.New("error in contributing")
+	}
+
+	util.ErrorCheck(stmt.QueryRow(amount, resourceName, p.ID).Scan(&resource.ID, &resource.Name, &resource.Amount, &resource.Goal, &throwaway), "error contributing to project: %v")
+
+	return resource, nil
 }
 
 func GetProjectNames() (result []string) {

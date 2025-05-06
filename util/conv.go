@@ -46,14 +46,18 @@ func ToUnit(amount int) string {
 	if amount == 0 {
 		return "0"
 	}
+	s := "s"
 
 	if amount < AMOUNT_STACK {
-		return fmt.Sprintf("%d items", amount)
+		if amount == 1 {
+			s = ""
+		}
+
+		return fmt.Sprintf("%d item%s", amount, s)
 	}
 
 	if amount < AMOUNT_SHULKER {
 		number := amount / AMOUNT_STACK
-		s := "s"
 
 		if number == 1 {
 			s = ""
@@ -67,7 +71,6 @@ func ToUnit(amount int) string {
 	}
 
 	number := amount / AMOUNT_SHULKER
-	s := "s"
 
 	if number == 1 {
 		s = ""
@@ -83,7 +86,7 @@ func ToUnit(amount int) string {
 func MakeProgress(amount, goal, quality int) (bar string) {
 	floatProgress := float32(amount) / float32(goal) * float32(quality)
 
-	for range int(floatProgress) {
+	for range min(int(floatProgress), quality) {
 		bar += "█"
 	}
 

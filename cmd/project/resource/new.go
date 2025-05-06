@@ -23,7 +23,7 @@ var NewResourceCommand = &discordgo.ApplicationCommandOption{
 		},
 		{
 			Name:        "resource",
-			Description: "Whatchu want fool",
+			Description: "Whatchu want fool?",
 			Type:        discordgo.ApplicationCommandOptionString,
 			Required:    true,
 		},

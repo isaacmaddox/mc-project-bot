@@ -10,6 +10,7 @@ var ProjectCommand = &discordgo.ApplicationCommand{
 	Options: []*discordgo.ApplicationCommandOption{
 		NewProjectCommand,
 		OverviewCommand,
+		ContributeCommand,
 		ResourceCommand,
 	},
 }
@@ -22,6 +23,8 @@ var ProjectHandler = func(discord *discordgo.Session, i *discordgo.InteractionCr
 		NewProjectHandler(discord, i)
 	case "overview":
 		OverviewHandler(discord, i)
+	case "contribute":
+		ContributeHandler(discord, i)
 	case "resource":
 		ResourceHandler(discord, i)
 	}

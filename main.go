@@ -60,9 +60,10 @@ func init() {
 
 			if strings.HasPrefix(componentName, "project_overview_") {
 				parts := strings.Split(componentName, "_")
-				projectName := parts[3]
+				projectName := parts[4]
 				page := int64(util.Extract(strconv.Atoi(parts[2])))
-				project.OverviewPaginatedHandler(discord, i, projectName, page)
+				sortBy := parts[3]
+				project.OverviewPaginatedHandler(discord, i, projectName, page, sortBy)
 			}
 		}
 	})
