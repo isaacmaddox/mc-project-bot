@@ -5,8 +5,11 @@ import (
 	"log"
 	"os"
 	"os/signal"
+	"strconv"
+	"strings"
 
 	"github.com/bwmarrin/discordgo"
+	"github.com/isaacmaddox/mc-project-bot/cmd"
 	"github.com/isaacmaddox/mc-project-bot/cmd/project"
 	"github.com/isaacmaddox/mc-project-bot/db"
 	"github.com/isaacmaddox/mc-project-bot/util"
@@ -32,14 +35,14 @@ var commands = []*discordgo.ApplicationCommand{
 	// cmd.HiCommand,
 	project.ProjectCommand,
 	// cmd.TestCommand,
-	// cmd.ClearCommand,
+	cmd.ClearCommand,
 }
 
 var commandHandlers = map[string]func(discord *discordgo.Session, i *discordgo.InteractionCreate){
 	// "hi":      cmd.HiHandler,
 	"project": project.ProjectHandler,
 	// "test":    cmd.TestHandler,
-	// "clear":   cmd.ClearHandler,
+	"clear": cmd.ClearHandler,
 }
 
 func init() {
@@ -48,8 +51,19 @@ func init() {
 	discord = util.Extract(discordgo.New("Bot " + TOKEN))
 
 	discord.AddHandler(func(discord *discordgo.Session, i *discordgo.InteractionCreate) {
-		if handler, ok := commandHandlers[i.ApplicationCommandData().Name]; ok {
-			handler(discord, i)
+		if i.Type == discordgo.InteractionApplicationCommand || i.Type == discordgo.InteractionApplicationCommandAutocomplete {
+			if handler, ok := commandHandlers[i.ApplicationCommandData().Name]; ok {
+				handler(discord, i)
+			}
+		} else if i.Type == discordgo.InteractionMessageComponent {
+			componentName := i.MessageComponentData().CustomID
+
+			if strings.HasPrefix(componentName, "project_overview_") {
+				parts := strings.Split(componentName, "_")
+				projectName := parts[3]
+				page := int64(util.Extract(strconv.Atoi(parts[2])))
+				project.OverviewPaginatedHandler(discord, i, projectName, page)
+			}
 		}
 	})
 }

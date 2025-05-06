@@ -73,8 +73,8 @@ func NewResource(discord *discordgo.Session, i *discordgo.InteractionCreate) {
 
 	projectName := util.Extract(util.GetString(optionMap, "project"))
 	resourceName := util.Extract(util.GetString(optionMap, "resource"))
-	goal := util.From_unit(util.Extract(util.GetString(optionMap, "goal")))
-	amount := util.From_unit(util.GetStringOptional(optionMap, "amount", "0"))
+	goal := util.FromUnit(util.Extract(util.GetString(optionMap, "goal")))
+	amount := util.FromUnit(util.GetStringOptional(optionMap, "amount", "0"))
 
 	var project db.Project
 	found := project.Get(projectName)
@@ -90,7 +90,7 @@ func NewResource(discord *discordgo.Session, i *discordgo.InteractionCreate) {
 	}
 
 	resource := project.AddResource(resourceName, amount, goal)
-	returnAmount := util.To_unit(resource.Amount)
+	returnAmount := util.ToUnit(resource.Amount)
 
 	if returnAmount == "" {
 		returnAmount = "0"
@@ -103,9 +103,9 @@ func NewResource(discord *discordgo.Session, i *discordgo.InteractionCreate) {
 				"# %s\n\n*Added resource*: **%s**\n-# [%s] (%s of %s)",
 				project.Name,
 				resource.Name,
-				util.Make_progress(resource.Amount, resource.Goal, 10),
+				util.MakeProgress(resource.Amount, resource.Goal, 15),
 				returnAmount,
-				util.To_unit(resource.Goal),
+				util.ToUnit(resource.Goal),
 			),
 		},
 	})

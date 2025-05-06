@@ -39,3 +39,11 @@ func GetStringOptional(optionMap *OptionMap, key string, backup string) string {
 
 	return backup
 }
+
+func GetIntOptional(optionMap *OptionMap, key string, backup int64) int64 {
+	if opt, ok := (*optionMap)[key]; ok {
+		return opt.IntValue()
+	}
+
+	return backup
+}

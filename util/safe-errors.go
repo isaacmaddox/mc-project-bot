@@ -16,19 +16,10 @@ func Extract[T any](value T, err error) T {
 	return value
 }
 
-
-func Extract_or_nil[T any](value T, err error) *T {
+func ExtractOrNil[T any](value T, err error) *T {
 	if err != nil {
 		return nil
 	}
 
 	return &value
-}
-
-func If_nil_then[T any](ptr *T, def T) T {
-	if ptr == nil {
-		return def
-	}
-
-	return *ptr
 }

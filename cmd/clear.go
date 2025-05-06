@@ -6,7 +6,7 @@ import (
 )
 
 var ClearCommand = &discordgo.ApplicationCommand{
-	Name: "clear",
+	Name:        "clear",
 	Description: "Clear the current channel (use only in testing)",
 }
 
@@ -14,13 +14,15 @@ var ClearHandler = func(discord *discordgo.Session, i *discordgo.InteractionCrea
 	discord.InteractionRespond(i.Interaction, &discordgo.InteractionResponse{
 		Type: discordgo.InteractionResponseChannelMessageWithSource,
 		Data: &discordgo.InteractionResponseData{
-			Content: "Clearing... channel",
+			Content: "Clearing channel...",
 		},
 	})
-	
+
 	for ok := true; ok; ok = true {
 		messages := util.Extract(discord.ChannelMessages(i.ChannelID, 50, "", "", ""))
-		if len(messages) == 0 { break }
+		if len(messages) == 0 {
+			break
+		}
 		messageIds := []string{}
 
 		for _, message := range messages {
